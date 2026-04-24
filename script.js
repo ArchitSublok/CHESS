@@ -1,89 +1,207 @@
 let main = document.querySelector(".chess_board").children;
 
-// for (let i = 0; i < main.length; i++) {
-//     if (i % 2 === 0) {
-//     main[i].classList.add("light-square");
-// } 
-//     else {
-//     main[i].classList.add("dark-square");
-//     }
-// }
+const allPiecesNodeList = document.querySelectorAll('[class*="white"]' || '[class*="black"]' );
+// Convert it to a true Array to use methods like .map() or .filter()
+const allPiecesArray = Array.from(allPiecesNodeList);
+console.log(allPiecesArray)
+
+const allWhitePiecesNodeList = document.querySelectorAll('[class*="white"]' );
+// Convert it to a true Array to use methods like .map() or .filter()
+const allWhitePiecesArray = Array.from(allWhitePiecesNodeList);
+console.log(allWhitePiecesArray)
+
+const allBlackPiecesNodeList = document.querySelectorAll('[class*="black"]' );
+// Convert it to a true Array to use methods like .map() or .filter()
+const allBlackPiecesArray = Array.from(allBlackPiecesNodeList);
+console.log(allBlackPiecesArray)
 
 
-// document.querySelector(".chess_board").addEventListener("click", function(e) {
-//     // 1. Find the square and check if there's a pawn inside
-//     const square = e.target.closest(".chess_board > div");
-//     if (!square) return;
+const whitePawnsNodeList = document.querySelectorAll('[class*="white_pawn"]');
+// Convert it to a true Array to use methods like .map() or .filter()
+const whitePawnsArray = Array.from(whitePawnsNodeList);
 
-//     // Target any pawn (white or black)
-//     const pawn = square.querySelector('[class*="pawn"]');
-//     if (!pawn) return;
+const whiteRookNodeList = document.querySelectorAll('[class*="white_rook"]');
+// Convert it to a true Array to use methods like .map() or .filter()
+const whiteRookArray = Array.from(whiteRookNodeList);
 
-//     // 2. Get current coordinates (x = row, y = column in your HTML)
-//     let currentX = parseInt(square.getAttribute("data-x"));
-//     let currentY = parseInt(square.getAttribute("data-y"));
+const whiteKnightNodeList = document.querySelectorAll('[class*="white_knight"]');
+// Convert it to a true Array to use methods like .map() or .filter()
+const whiteKnightArray = Array.from(whiteKnightNodeList);
 
-//     // 3. Calculate the next step
-//     // White pawns move from row 6 -> 5 (x - 1)
-//     // Black pawns move from row 1 -> 2 (x + 1)
-//     const isWhite = pawn.className.includes("white_pawn");
-//     // const nextX = isWhite ? currentX - 1 : currentX + 1;
+const whiteBishopNodeList = document.querySelectorAll('[class*="white_bishop"]');
+// Convert it to a true Array to use methods like .map() or .filter()
+const whiteBishopArray = Array.from(whiteBishopNodeList);
 
-//     let nextX ;
-//     let nextY=currentY;
-//     const nextY;
+const whiteQueenNodeList = document.querySelectorAll('[class*="white_queen"]');
+// Convert it to a true Array to use methods like .map() or .filter()
+const whiteQueenArray = Array.from(whiteQueenNodeList);
+
+const whiteKingNodeList = document.querySelectorAll('[class*="white_king"]');
+// Convert it to a true Array to use methods like .map() or .filter()
+const whiteKingArray = Array.from(whiteKingNodeList);
 
 
-//     if(isWhite==true){
-//         nextX=currentX-1;
-//     }
-//     else{
-//         nextX=currentX+1;
 
-//     }
+const blackPawnsNodeList = document.querySelectorAll('[class*="black_pawn"]');
+// Convert it to a true Array to use methods like .map() or .filter()
+const blackPawnsArray = Array.from(blackPawnsNodeList);
 
-//     // 4. Find the destination square using the new row (nextX) and same column (currentY)
-//     const destination = document.querySelector(`[data-x="${nextX}"][data-y="${nextY}"]`);
+const blackRookNodeList = document.querySelectorAll('[class*="black_rook"]');
+// Convert it to a true Array to use methods like .map() or .filter()
+const blackRookArray = Array.from(blackRookNodeList);
 
-//     // 5. Move the piece if the destination is valid and empty
-//     if (destination) {
-//         // Simple check: if it has no children or just the text label, it's empty
-//         if (destination.children.length <= 1) {
-//             destination.appendChild(pawn);
-//         }
-//     }
-// });
+const blackKnightNodeList = document.querySelectorAll('[class*="black_knight"]');
+// Convert it to a true Array to use methods like .map() or .filter()
+const blackKnightArray = Array.from(blackKnightNodeList);
+
+const blackBishopNodeList = document.querySelectorAll('[class*="black_bishop"]');
+// Convert it to a true Array to use methods like .map() or .filter()
+const blackBishopArray = Array.from(blackBishopNodeList);
+
+const blackQueenNodeList = document.querySelectorAll('[class*="black_queen"]');
+// Convert it to a true Array to use methods like .map() or .filter()
+const blackQueenArray = Array.from(blackQueenNodeList);
+
+const blackKingNodeList = document.querySelectorAll('[class*="black_king"]');
+// Convert it to a true Array to use methods like .map() or .filter()
+const blackKingArray = Array.from(blackKingNodeList);
+
+// let selectedX=;
+// let selectedY=;
+
+let selectedPiece = null; // This variable tracks if something is "lifted"
 
 document.querySelector(".chess_board").addEventListener("click", function(e) {
     const square = e.target.closest(".chess_board > div");
     if (!square) return;
 
-    const pawn = square.querySelector('[class*="pawn"]');
-    if (!pawn) return;
+    // Check if we are already "holding" a piece
+    if (selectedPiece === null) {
+        // Try to find a piece inside the clicked square
+        const piece = square.querySelector('[class*="white"], [class*="black"]');
+        
+        if (allPiecesArray.includes(piece)) {
+            selectedPiece = piece; // Now a piece IS selected
 
-    const currentX = parseInt(square.getAttribute("data-x"));
-    const currentY = parseInt(square.getAttribute("data-y"));
+            const currentSquare = selectedPiece.parentElement;
 
-    const isWhite = pawn.className.includes("white");
+            const initX = currentSquare.getAttribute("data-x");
+            const initY = currentSquare.getAttribute("data-y");
+            // console.log(x);
+            // console.log();
 
-    // 1. Use 'let' instead of 'const' so you can assign values inside the IF
-    let nextX;
-    let nextY = currentY; // Moving forward means the column (Y) stays the same
+            console.log("Piece selected: ", selectedPiece.className);
 
-    if (isWhite) {
-        nextX = currentX - 1; // White moves 'up' the row numbers
-    } else {
-        nextX = currentX + 1; // Black moves 'down' the row numbers
-    }
+            
 
-    // 2. FIXED: Use exactly 'nextX'. 
-    // Your previous code had "${nextX+1}", which moved the piece 2 squares!
-    const destination = document.querySelector(`[data-x="${nextX}"][data-y="${nextY}"]`);
+            document.querySelector(".chess_board").addEventListener("click", function(e) {
+            const square = e.target.closest(".chess_board > div");
+    
+                if (square) {
+                // Pass the square you clicked into your function
+                 bgcolor(square); 
+                            }
+                    });
 
-    if (destination) {
-        // Only move if the square is empty (has 1 or 0 children)
-        if (destination.children.length <= 1) {
-            destination.appendChild(pawn);
+
         }
+    } else {
+        const piece = square.querySelector('[class*="white"], [class*="black"]');
+        // A piece was already selected! 
+        // This is where you would handle the move logic.
+        console.log("Moving the selected piece...");
+        
+
+        const startSquare = selectedPiece.parentElement;
+        const startX = parseInt(startSquare.getAttribute("data-x"));
+        const startY = parseInt(startSquare.getAttribute("data-y"));
+
+        const endX = square.getAttribute("data-x");
+        const endY = square.getAttribute("data-y");
+
+        square.appendChild(selectedPiece);
+        console.log(`Moved from (${startX}, ${startY}) to (${endX}, ${endY})`);
+        // console.log(endX);
+        // console.log(endY);
+
+
+        let distance=0;
+
+        // 1. Find the square at those coordinates
+        const targetSquare = document.querySelector(`[data-x="${endX}"][data-y="${endY}"]`);
+
+        // 2. Check if it contains a piece
+        const isOccupied = targetSquare?.querySelector('[class*="white"], [class*="black"]');
+
+        if (isOccupied) {
+            console.log("The square is NOT empty. A piece is there.");
+        } else {
+            console.log("The square IS empty.");
+    }
+            // if(whitePawnsArray.includes(piece)){
+                
+            // }
+
+            // if(whiteRookArray.includes(piece)){
+
+            // }
+
+            // if(whiteBishopArray.includes(piece)){
+
+            // }
+
+            // if(whiteKnightArray.includes(piece)){
+
+            // }
+
+            // if(whiteQueenArray.includes(piece)){
+
+            // }
+
+            // if(whiteKingArray.includes(piece)){
+
+            // }
+
+
+
+
+
+            // if(blackPawnsArray.includes(piece)){
+
+            // }
+
+            // if(blackRookArray.includes(piece)){
+
+            // }
+
+            // if(blackBishopArray.includes(piece)){
+
+            // }
+
+            // if(blackKnightArray.includes(piece)){
+
+            // }
+
+            // if(blackQueenArray.includes(piece)){
+
+            // }
+
+            // if(blackKingArray.includes(piece)){
+
+            // }
+
+
+
+        selectedPiece = null; 
     }
 });
+
+function bgcolor(square) {
+                square.style.backgroundColor = "yellow";
+
+                setTimeout(() => {
+                // This clears the yellow and returns it to the CSS default 
+                // (.light-square or .dark-square)
+                    square.style.backgroundColor = ""; 
+                    }, 1000);
+                }

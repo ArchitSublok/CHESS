@@ -1,6 +1,30 @@
 *{
     /* background-color: black; */
 }
+
+.main{
+    display: flex;
+    flex-direction: column;
+    
+}
+
+.white_pieces{
+    width:20vw;
+    height:10vh;
+    border :2px solid black;   
+    margin: 20px auto; 
+
+}
+
+.black_pieces{
+    width:20vw;
+    height:10vh;
+    border :2px solid black;
+    margin: 20px auto; 
+
+
+}
+
 .chess_board {
     display: grid;
     /* This creates 8 equal columns and rows */
@@ -37,5 +61,4 @@
 .dark-square { /* Changed _ to - */
     background-color: #769656;
 }
-
 
